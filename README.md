@@ -2,6 +2,26 @@
 
 This repository contains the source codes for my YouTube videos.
 
+## Directory Structure
+
+```
+youtube-video/
+├── finetune/          # LLM & VLM fine-tuning (Qwen, Idefics, mergekit)
+├── how_to_use/         # Tutorials and guides
+├── pretrain_llm/       # LLM pretraining from scratch
+├── quantize/          # Model quantization notebooks
+└── README.md
+```
+
+## Topics Covered
+
+| Folder | Description |
+|--------|-------------|
+| `finetune` | LLM & VLM fine-tuning (Qwen, Idefics, mergekit) |
+| `how_to_use` | Tutorials for using various models |
+| `pretrain_llm` | Pretraining LLMs from scratch (Mistral, Phi-3) |
+| `quantize` | Model quantization techniques |
+
 ## Installation
 
 To install the necessary components, follow these steps:
