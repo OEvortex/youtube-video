@@ -26,7 +26,7 @@ VIDEO_PATH = OUTPUT_DIR / "optimizers_whiteboard.mp4"
 VOICE = "en-US-GuyNeural"
 VOICE_RATE = "+4%"
 VOICE_VOLUME = 1.25
-FONT_NAME = "feasibly"
+FONT_NAME = "cabin_sketch"
 
 BG = WHITE
 SKETCH = SketchStyle(roughness=1.2, bowing=0.8, disable_font_mixture=True)
@@ -108,9 +108,9 @@ def build_scene() -> float:
         # ---------------------------------------------------------
         intro_title = make_title("Optimizers: SGD, RMSprop & Adam", y=200, color=BLACK)
         
-        sgd_box = FlowchartProcess("SGD\n(Stochastic\nGradient Descent)", top_left=(260, 450), width=350, height=200, font_size=42, fill_style=FillStyle(color=PASTEL_BLUE, opacity=0.3), stroke_style=StrokeStyle(color=BLUE, width=3), sketch_style=SKETCH)
-        rms_box = FlowchartProcess("RMSprop\n(Root Mean Square\nPropagation)", top_left=(785, 450), width=350, height=200, font_size=42, fill_style=FillStyle(color=PASTEL_GREEN, opacity=0.3), stroke_style=StrokeStyle(color=GREEN, width=3), sketch_style=SKETCH)
-        adam_box = FlowchartProcess("Adam\n(Adaptive Moment\nEstimation)", top_left=(1310, 450), width=350, height=200, font_size=42, fill_style=FillStyle(color=PASTEL_RED, opacity=0.3), stroke_style=StrokeStyle(color=RED, width=3), sketch_style=SKETCH)
+        sgd_box = FlowchartProcess("SGD\n(Stochastic\nGradient Descent)", top_left=(260, 450), width=350, height=200, font_size=42, font_name=FONT_NAME, fill_style=FillStyle(color=PASTEL_BLUE, opacity=0.3), stroke_style=StrokeStyle(color=BLUE, width=3), sketch_style=SKETCH)
+        rms_box = FlowchartProcess("RMSprop\n(Root Mean Square\nPropagation)", top_left=(785, 450), width=350, height=200, font_size=42, font_name=FONT_NAME, fill_style=FillStyle(color=PASTEL_GREEN, opacity=0.3), stroke_style=StrokeStyle(color=GREEN, width=3), sketch_style=SKETCH)
+        adam_box = FlowchartProcess("Adam\n(Adaptive Moment\nEstimation)", top_left=(1310, 450), width=350, height=200, font_size=42, font_name=FONT_NAME, fill_style=FillStyle(color=PASTEL_RED, opacity=0.3), stroke_style=StrokeStyle(color=RED, width=3), sketch_style=SKETCH)
         
         scene.add(SketchAnimation(start_time=intro_start + 0.5, duration=1.5), drawable=intro_title)
         scene.add(SketchAnimation(start_time=intro_start + 2.0, duration=1.0), drawable=sgd_box)
@@ -138,7 +138,7 @@ def build_scene() -> float:
         scene.add(SketchAnimation(start_time=sgd_start + 2.0, duration=0.5), drawable=target)
         
         # SGD
-        sgd_math = Math(r"SGD: $w \leftarrow w - \alpha \nabla L$", position=(960, 200), font_size=56, stroke_style=StrokeStyle(color=BLUE, width=3))
+        sgd_math = Math(r"SGD: $w \leftarrow w - \alpha \nabla L$", position=(960, 200), font_size=56, font_name=FONT_NAME, stroke_style=StrokeStyle(color=BLUE, width=3))
         sgd_path = LinearPath(
             points=[(400, 600), (480, 920), (580, 630), (680, 880), (780, 680), (860, 820), (920, 720), (960, 750)],
             stroke_style=StrokeStyle(color=BLUE, width=5),
@@ -150,7 +150,7 @@ def build_scene() -> float:
         scene.add(SketchAnimation(start_time=sgd_path_start + 0.5, duration=3.5), drawable=sgd_path)
 
         # RMSprop
-        rms_math = Math(r"RMSprop: $w \leftarrow w - \frac{\alpha}{\sqrt{v}} \nabla L$", position=(960, 300), font_size=56, stroke_style=StrokeStyle(color=GREEN, width=3))
+        rms_math = Math(r"RMSprop: $w \leftarrow w - \frac{\alpha}{\sqrt{v}} \nabla L$", position=(960, 300), font_size=56, font_name=FONT_NAME, stroke_style=StrokeStyle(color=GREEN, width=3))
         rms_path = Curve(
             points=[(400, 600), (550, 710), (700, 800), (850, 770), (960, 750)],
             stroke_style=StrokeStyle(color=GREEN, width=5),
@@ -162,7 +162,7 @@ def build_scene() -> float:
         scene.add(SketchAnimation(start_time=rmsprop_path_start + 0.5, duration=3.0), drawable=rms_path)
 
         # Adam
-        adam_math = Math(r"Adam: $w \leftarrow w - \frac{\alpha}{\sqrt{v}} m$", position=(960, 400), font_size=56, stroke_style=StrokeStyle(color=RED, width=3))
+        adam_math = Math(r"Adam: $w \leftarrow w - \frac{\alpha}{\sqrt{v}} m$", position=(960, 400), font_size=56, font_name=FONT_NAME, stroke_style=StrokeStyle(color=RED, width=3))
         adam_path = Curve(
             points=[(400, 600), (600, 780), (850, 850), (1050, 720), (960, 750)],
             stroke_style=StrokeStyle(color=RED, width=5),
@@ -191,6 +191,7 @@ def build_scene() -> float:
             col_widths=[350, 550, 600],
             row_heights=[100, 120, 120, 120],
             font_size=46,
+            font_name=FONT_NAME,
             header_fill_style=FillStyle(color=PASTEL_BLUE, opacity=0.4),
             fill_style=FillStyle(color=WHITE),
             stroke_style=StrokeStyle(color=BLACK, width=3.0),
@@ -208,7 +209,8 @@ def build_scene() -> float:
 
 def main() -> None:
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    asyncio.run(synthesize_narration(AUDIO_PATH))
+    # Always refresh the narration so bookmark timing stays aligned with the current script.
+    asyncio.run(synthesize_narration(AUDIO_PATH, regenerate=True))
     final_duration = build_scene()
     print("Rendering whiteboard animation...")
     scene.render(str(VIDEO_PATH), max_length=final_duration)
