@@ -272,8 +272,12 @@ def build_scene() -> float:
         
         # 2. Matrix Multiplication Arrow
         arr_mul = Arrow(start_point=(650, 550), end_point=(850, 550), stroke_style=StrokeStyle(color=BLACK, width=6))
-        lbl_mul = make_body("Multiply by\nR Matrix", x=750, y=520, color=BLACK, font_size=40)
-        
+        # Separate the label into two lines, and add a strikethrough line over 'R Matrix'
+        lbl_mul_top = make_body("Multiply by", x=750, y=500, color=BLACK, font_size=40)
+        lbl_mul_bottom = make_body("R Matrix", x=750, y=540, color=BLACK, font_size=40)
+        # Draw a strikethrough line over 'R Matrix'
+        strikethrough = Line(start=(670, 540), end=(830, 540), stroke_style=StrokeStyle(color=BLACK, width=5))
+
         # 3. After (Gaussian)
         ax2_x = Line(start=(1350, 700), end=(1750, 700), stroke_style=stroke)
         ax2_y = Line(start=(1350, 700), end=(1350, 400), stroke_style=stroke)
@@ -298,7 +302,9 @@ def build_scene() -> float:
         scene.add(SketchAnimation(start_time=stage1_start + 6.5, duration=0.8), drawable=lbl_spike)
         
         scene.add(SketchAnimation(start_time=stage1_start + 9.0, duration=1.0), drawable=arr_mul)
-        scene.add(SketchAnimation(start_time=stage1_start + 9.5, duration=0.8), drawable=lbl_mul)
+        scene.add(SketchAnimation(start_time=stage1_start + 9.5, duration=0.8), drawable=lbl_mul_top)
+        scene.add(SketchAnimation(start_time=stage1_start + 9.7, duration=0.8), drawable=lbl_mul_bottom)
+        scene.add(SketchAnimation(start_time=stage1_start + 9.7, duration=0.8), drawable=strikethrough)
         
         scene.add(SketchAnimation(start_time=stage1_start + 14.0, duration=1.0), drawable=ax2_x)
         scene.add(SketchAnimation(start_time=stage1_start + 14.0, duration=1.0), drawable=ax2_y)
@@ -306,7 +312,7 @@ def build_scene() -> float:
         scene.add(SketchAnimation(start_time=stage1_start + 17.0, duration=1.0), drawable=lbl_gauss)
 
         # Erase previous elements before Lloyd-Max overlay and explanation
-        tq1_drawables_pre_lloyd = [tq1_title, rot_math, ax1_x, ax1_y, spike_path, lbl_spike, arr_mul, lbl_mul, ax2_x, ax2_y, bell_curve, lbl_gauss]
+        tq1_drawables_pre_lloyd = [tq1_title, rot_math, ax1_x, ax1_y, spike_path, lbl_spike, arr_mul, lbl_mul_top, lbl_mul_bottom, strikethrough, ax2_x, ax2_y, bell_curve, lbl_gauss]
         make_eraser(tq1_drawables_pre_lloyd, scene, start_time=lloyd_max_start - 1.2)
 
         # LLOYD MAX OVERLAY and explanation
