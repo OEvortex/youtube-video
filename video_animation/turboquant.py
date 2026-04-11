@@ -27,7 +27,7 @@ VIDEO_PATH = OUTPUT_DIR / "turboquant.mp4"
 VOICE = "en-US-GuyNeural"
 VOICE_RATE = "+0%"
 VOICE_VOLUME = 1.25
-FONT_NAME = "feasibly"
+FONT_NAME = "ArchitectsDaughter-Regular"
 
 BG = WHITE
 SKETCH = SketchStyle(roughness=1.2, bowing=0.8, disable_font_mixture=True)
@@ -259,7 +259,7 @@ def build_scene() -> float:
         
         tq1_title = make_title("Stage 1: Random Orthogonal Rotation", y=150, color=PURPLE)
         
-        rot_math = Math(r"$X_{rotated} = X \times R_{orthogonal}$", position=(960, 250), font_size=80, stroke_style=StrokeStyle(color=PURPLE, width=3))
+        rot_math = Math(r"$X_{rotated} = X \times R_{orthogonal}$", position=(960, 220), font_size=80, stroke_style=StrokeStyle(color=PURPLE, width=3))
         
         # 3 Panels: Before -> Operation -> After
         
@@ -268,11 +268,11 @@ def build_scene() -> float:
         ax1_y = Line(start=(150, 700), end=(150, 400), stroke_style=stroke)
         p1 =[(150, 680), (250, 690), (350, 420), (450, 685), (550, 690)] # Massive spike
         spike_path = LinearPath(points=p1, stroke_style=StrokeStyle(color=RED, width=6), sketch_style=SKETCH)
-        lbl_spike = make_body("Extreme Spike", x=350, y=780, color=RED, font_size=40)
+        lbl_spike = make_body("Extreme Spike", x=350, y=820, color=RED, font_size=40)
         
         # 2. Matrix Multiplication Arrow
         arr_mul = Arrow(start_point=(650, 550), end_point=(850, 550), stroke_style=StrokeStyle(color=BLACK, width=6))
-        lbl_mul = make_body("Multiply by\nR Matrix", x=750, y=480, color=BLACK, font_size=40)
+        lbl_mul = make_body("Multiply by\nR Matrix", x=750, y=520, color=BLACK, font_size=40)
         
         # 3. After (Gaussian)
         ax2_x = Line(start=(1350, 700), end=(1750, 700), stroke_style=stroke)
@@ -285,9 +285,9 @@ def build_scene() -> float:
             y = 700 - 200 * math.exp(-0.5 * norm_x**2)
             bell_pts.append((x, y))
         bell_curve = Curve(points=bell_pts, stroke_style=StrokeStyle(color=GREEN, width=6), sketch_style=SKETCH)
-        lbl_gauss = make_body("Smooth Gaussian\nDistribution", x=1550, y=780, color=GREEN, font_size=40)
+        lbl_gauss = make_body("Smooth Gaussian\nDistribution", x=1550, y=820, color=GREEN, font_size=40)
         
-        iso_text = make_body("Energy is smeared uniformly across all dimensions.\nOutliers vanish. Data becomes isotropic.", x=960, y=900, color=PURPLE, font_size=56)
+        iso_text = make_body("Energy is smeared uniformly across all dimensions.\nOutliers vanish. Data becomes isotropic.", x=960, y=970, color=PURPLE, font_size=56)
 
         scene.add(SketchAnimation(start_time=turboquant_start + 0.5, duration=1.0), drawable=tq1_title)
         scene.add(SketchAnimation(start_time=stage1_start + 1.0, duration=1.5), drawable=rot_math)
@@ -304,14 +304,17 @@ def build_scene() -> float:
         scene.add(SketchAnimation(start_time=stage1_start + 14.0, duration=1.0), drawable=ax2_y)
         scene.add(SketchAnimation(start_time=stage1_start + 15.0, duration=2.0), drawable=bell_curve)
         scene.add(SketchAnimation(start_time=stage1_start + 17.0, duration=1.0), drawable=lbl_gauss)
-        
-        scene.add(SketchAnimation(start_time=stage1_start + 20.0, duration=2.0), drawable=iso_text)
-        
-        # LLOYD MAX OVERLAY
-        lm_box = FlowchartProcess("Global Lloyd-Max Quantizer\n(Zero Per-Block Overhead)", top_left=(660, 400), width=600, height=180, font_size=56, fill_style=FillStyle(color=PASTEL_GREEN, opacity=0.9), stroke_style=StrokeStyle(color=GREEN, width=4))
-        scene.add(SketchAnimation(start_time=lloyd_max_start + 2.0, duration=1.5), drawable=lm_box)
 
-        tq1_drawables =[tq1_title, rot_math, ax1_x, ax1_y, spike_path, lbl_spike, arr_mul, lbl_mul, ax2_x, ax2_y, bell_curve, lbl_gauss, iso_text, lm_box]
+        # Erase previous elements before Lloyd-Max overlay and explanation
+        tq1_drawables_pre_lloyd = [tq1_title, rot_math, ax1_x, ax1_y, spike_path, lbl_spike, arr_mul, lbl_mul, ax2_x, ax2_y, bell_curve, lbl_gauss]
+        make_eraser(tq1_drawables_pre_lloyd, scene, start_time=lloyd_max_start - 1.2)
+
+        # LLOYD MAX OVERLAY and explanation
+        lm_box = FlowchartProcess("Global Lloyd-Max Quantizer\n(Zero Per-Block Overhead)", top_left=(660, 400), width=600, height=180, font_size=56, fill_style=FillStyle(color=PASTEL_GREEN, opacity=0.9), stroke_style=StrokeStyle(color=GREEN, width=4))
+        scene.add(SketchAnimation(start_time=lloyd_max_start + 0.5, duration=1.5), drawable=lm_box)
+        scene.add(SketchAnimation(start_time=lloyd_max_start + 2.5, duration=2.0), drawable=iso_text)
+
+        tq1_drawables = tq1_drawables_pre_lloyd + [lm_box, iso_text]
 
         # ---------------------------------------------------------
         # SECTION 5: Stage 2 - QJL Residual Correction (~2m40s - ~3m40s)
