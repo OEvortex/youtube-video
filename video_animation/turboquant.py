@@ -27,7 +27,7 @@ VIDEO_PATH = OUTPUT_DIR / "turboquant.mp4"
 VOICE = "en-US-GuyNeural"
 VOICE_RATE = "+0%"
 VOICE_VOLUME = 1.25
-FONT_NAME = "ArchitectsDaughter-Regular"
+FONT_NAME = "feasibly"
 
 BG = WHITE
 SKETCH = SketchStyle(roughness=1.2, bowing=0.8, disable_font_mixture=True)
@@ -397,7 +397,7 @@ def build_scene() -> float:
 
 def main() -> None:
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    asyncio.run(synthesize_narration(AUDIO_PATH))
+    asyncio.run(synthesize_narration(AUDIO_PATH, regenerate=True))
     final_duration = build_scene()
     print("Rendering ultimate TurboQuant masterclass animation...")
     scene.render(str(VIDEO_PATH), max_length=final_duration)
