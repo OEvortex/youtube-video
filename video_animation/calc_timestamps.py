@@ -7,10 +7,14 @@ sys.path.append(script_dir)
 
 import asyncio
 from handanim.core import Scene
-from deepseek_v4_architecture import (
-    scene_title, scene_context_problem, scene_architecture_overview,
-    scene_mhc, scene_csa, scene_hca, scene_muon, scene_stability,
-    scene_post_training, scene_benchmarks, scene_conclusion,
+from multihead_attention import (
+    scene_title,
+    scene_attention_intuition,
+    scene_qkv_explained,
+    scene_attention_scores,
+    scene_multiple_heads,
+    scene_complete_flow,
+    scene_key_insights,
     EdgeTTSProvider, WHITE, W, H, FPS
 )
 
@@ -28,17 +32,13 @@ def main():
     tts = EdgeTTSProvider()
 
     scenes = [
-        ("Intro: DeepSeek-V4 Overview", scene_title),
-        ("The Long-Context Bottleneck", scene_context_problem),
-        ("Architecture Overview", scene_architecture_overview),
-        ("Manifold-Constrained Hyper-Connections (mHC)", scene_mhc),
-        ("Compressed Sparse Attention (CSA)", scene_csa),
-        ("Heavily Compressed Attention (HCA)", scene_hca),
-        ("The Muon Optimizer", scene_muon),
-        ("Mitigating Training Instability", scene_stability),
-        ("Post-Training: OPD Pipeline", scene_post_training),
-        ("Benchmark Results", scene_benchmarks),
-        ("Conclusion & Summary", scene_conclusion),
+        ("Cinematic Title", scene_title),
+        ("The Attention Intuition", scene_attention_intuition),
+        ("Query, Key, and Value Explained", scene_qkv_explained),
+        ("Attention Score Calculation", scene_attention_scores),
+        ("Why Multiple Heads?", scene_multiple_heads),
+        ("Complete Flow", scene_complete_flow),
+        ("Key Insights", scene_key_insights),
     ]
 
     print("# YouTube Chapters & Scene Timestamps")
